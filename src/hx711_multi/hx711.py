@@ -396,6 +396,32 @@ class HX711:
         for adc, weight_multiple in zip(adcs, weight_multiples):
             adc._weight_multiple = weight_multiple
 
+    def tare(self, zero_offset: float):
+        """
+        Tares the adc and sets the zero_offset, scaled to the weight multiple of the adc.
+        Example: sets adc.zero_offset to 'zero_offset * weight_multiple'.
+        TODO: Stop using a magic number
+        TODO: Increase functionality to include setting offset for multiple adcs.(Currently only tested on one ADC)
+
+        Args:
+            zero_offset (float): offset from zero, scaled to weight_multiple
+        """
+        adc: ADC
+        for adc in self._adcs:
+            offset_scaled = adc.get_weight_multiple() * (zero_offset + 1)
+            adc.zero(offset=offset_scaled)
+
+    def get_offset(self):
+        """
+        Gets zero_offset of the all adc's
+
+        Returns: (list) A list of all of the offsets of adcs.
+        TODO: Extend functionality to include returning more than one offset. (Currently is only tested on one adc)
+        """
+        adc: ADC
+        offsets = [adc.get_zero_offset() for adc in self._adcs]
+        return offsets
+
 
 class ADC:
     """
@@ -463,6 +489,12 @@ class ADC:
             self._zero_offset = offset
         else:
             raise ValueError(f'No offset provided to zero() function')
+
+    def get_zero_offset(self):
+        return self._zero_offset
+
+    def get_weight_multiple(self):
+        return self._weight_multiple
 
     def set_weight_multiple(self, weight_multiple: float):
         """ simply sets multiple. example: scale indicates value of 5000 for 1 gram on scale, weight_multiple = 5000 """
