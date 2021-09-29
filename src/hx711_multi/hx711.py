@@ -8,8 +8,9 @@ import RPi.GPIO as GPIO
 from time import sleep, perf_counter
 from statistics import mean, median, stdev
 from .utils import convert_to_list
-from logging import getLogger, Logger, StreamHandler
-
+import logging
+from logging import getLogger, Logger, handlers, Formatter
+import os
 
 class HX711:
     """
@@ -45,10 +46,16 @@ class HX711:
                  log_level: str = 'WARN',
                  ):
         self._logger: Logger = getLogger('hx711-multi')
+
+        default_path = "/var/log"
+        path = os.path.join(default_path + '/hx711-multi')
+        handler = handlers.RotatingFileHandler(path, maxBytes=2000000, backupCount=6)
+        formatter = Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        handler.setLevel(logging.DEBUG)
+        self._logger.addHandler(handler)
         self._logger.setLevel(log_level)
-        consoleLogHandler = StreamHandler()
-        consoleLogHandler.setLevel(log_level)
-        self._logger.addHandler(consoleLogHandler)
+
         self._all_or_nothing = all_or_nothing
         self._dout_pins = dout_pins
         self._sck_pin = sck_pin
