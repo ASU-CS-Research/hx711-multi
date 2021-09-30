@@ -415,7 +415,7 @@ class HX711:
         """
         adc: ADC
         for adc in self._adcs:
-            offset_scaled = adc.get_weight_multiple() * (zero_offset + 1)
+            offset_scaled = adc.get_weight_multiple() * (zero_offset)
             adc.zero(offset=offset_scaled)
 
     def get_offset(self):
