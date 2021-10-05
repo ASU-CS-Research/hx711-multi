@@ -8,7 +8,6 @@ import RPi.GPIO as GPIO
 from time import sleep, perf_counter
 from statistics import mean, median, stdev
 from .utils import convert_to_list
-import logging
 from logging import getLogger, Logger, handlers, Formatter
 import os
 
@@ -52,7 +51,7 @@ class HX711:
         handler = handlers.RotatingFileHandler(path, maxBytes=2000000, backupCount=6)
         formatter = Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         handler.setFormatter(formatter)
-        handler.setLevel(logging.DEBUG)
+        handler.setLevel(log_level)
         self._logger.addHandler(handler)
         self._logger.setLevel(log_level)
 
@@ -361,6 +360,8 @@ class HX711:
                     readings_new, readings)]
             else:
                 readings = readings_new
+            if type(readings) is not list:
+                readings = [readings]
             if None not in readings:
                 break
         if None in readings:
@@ -407,20 +408,17 @@ class HX711:
         """
         Tares the adc and sets the zero_offset, scaled to the weight multiple of the adc.
         Example: sets adc.zero_offset to 'zero_offset * weight_multiple'.
-        TODO: Stop using a magic number
         TODO: Increase functionality to include setting offset for multiple adcs.(Currently only tested on one ADC)
-
         Args:
             zero_offset (float): offset from zero, scaled to weight_multiple
         """
         adc: ADC
         for adc in self._adcs:
-            offset_scaled = adc.get_weight_multiple() * (zero_offset)
-            adc.zero(offset=offset_scaled)
+            adc.zero(offset=float(zero_offset))
 
     def get_offset(self):
         """
-        Gets zero_offset of the all adc's
+        Gets zero_offset of the all adc's:
 
         Returns: (list) A list of all of the offsets of adcs.
         TODO: Extend functionality to include returning more than one offset. (Currently is only tested on one adc)
