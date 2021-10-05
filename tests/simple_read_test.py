@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# set root dir if being run standlone from subfolder
+# set root dir if being run standalone from sub-folder
 if __name__ == '__main__':
     import sys
     import pathlib
