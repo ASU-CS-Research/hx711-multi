@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# set root dir if being run standlone from subfolder
+# set root dir if being run standalone from sub-folder
 if __name__ == '__main__':
     import sys
     import pathlib
@@ -34,11 +34,12 @@ try:
         start = perf_counter()
 
         # perform read operation, returns signed integer values as delta from zero()
-        # readings aare filtered for bad data and then averaged
+        # readings are filtered for bad data and then averaged
         raw_vals = hx711.read_raw(readings_to_average=10)
 
         # request weights using multiples set previously with set_weight_multiples()
-        # use_prev_read=True means this function call will not perform a new read, it will use what was acquired during read_raw()
+        # use_prev_read=True means this function call will not perform a
+        # new read, it will use what was acquired during read_raw()
         weights = hx711.read_weight(use_prev_read=True)
 
         read_duration = perf_counter() - start
