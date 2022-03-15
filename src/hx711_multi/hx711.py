@@ -392,6 +392,7 @@ class HX711:
             dout_pins (float | list of floats, optional): use this instead of adc_indices if desired
 
         """
+        self._logger.warning("This is the new version of the code. It is a test. ")
         weight_multiples = convert_to_list(weight_multiples, _type=None)
 
         # if no indices of dout_pins were entered, just create indices as range of length of weight_multiples
