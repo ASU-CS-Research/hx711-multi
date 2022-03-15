@@ -411,6 +411,7 @@ class HX711:
         # set weight multiples to ADCs
         for adc, weight_multiple in zip(adcs, weight_multiples):
             adc._weight_multiple = weight_multiple
+        self._adcs = adcs
 
     def tare(self, zero_offset: float):
         """
