@@ -480,7 +480,7 @@ class ADC:
         self._current_raw_read = 0
         self.raw_reads = []
         self.reads = []
-        self._max_stdev = 100
+        self._max_stdev = 1000
         self._reads_filtered = []
         self._max_number_of_stdev_from_med = 2.0
         self._read_med = None
